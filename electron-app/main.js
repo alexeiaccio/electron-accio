@@ -2,7 +2,11 @@
 const {app, BrowserWindow} = require('electron')
 const request = require('request')
 
-require('child_process').spawn('node', ['./react-app/scripts/start.js'], {
+const react = require('child_process').spawn('node', ['./scripts/start.js'], {
+  cwd: process.cwd()
+})
+
+const express = require('child_process').spawn('node', ['../graphql-server/index.js'], {
   cwd: process.cwd()
 })
 
@@ -25,8 +29,7 @@ function createWindow () {
   // mainWindow.loadFile('index.html')
   let checkServerRunning = setInterval(() => {
     request('http://localhost:3000/', (error, response, body) => {
-      console.log(process.cwd())
-      if (!error && response.statusCode == 200) {
+      if (!error && response.statusCode === 200) {
 
         mainWindow.loadURL('http://localhost:3000/')
         clearInterval(checkServerRunning)
@@ -44,6 +47,7 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
     react.kill('SIGINT')
+    express.kill('SIGINT')
   })
 }
 

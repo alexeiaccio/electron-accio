@@ -1,21 +1,11 @@
 {
   "name": "electron-accio",
   "version": "0.1.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
-  "scripts": {
-    "start": "node start-electron.js"
-  },
+  "description": "An Electron application",
   "repository": "https://github.com/alexeiaccio/electron-accio",
   "keywords": [
     "Electron"
   ],
   "author": "Alexei Accio <alexei.accio@gmail.com>",
-  "license": "CC0-1.0",
-  "devDependencies": {
-    "electron": "^6.0.0-beta.6"
-  },
-  "dependencies": {
-    "request": "^2.88.0"
-  }
+  "license": "CC0-1.0"
 }
