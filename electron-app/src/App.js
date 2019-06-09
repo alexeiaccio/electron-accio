@@ -14,7 +14,7 @@ function App() {
         <Query
           query={gql`
             {
-              hello(name: "Accio")
+              hello
             }
           `}
         >

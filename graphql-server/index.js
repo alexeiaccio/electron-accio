@@ -1,30 +1,29 @@
-const fs = require('fs')
-const { GraphQLServer } = require('graphql-yoga')
+const { ApolloServer } = require('apollo-server');
 
-const typeDefs = `
-  type Query {
-    hello(name: String): String!
-  }
-`
+const { typeDefs } = require('./type-defs')
+const { resolvers } = require('./resolvers')
+const { API } = require('./api')
 
-const resolvers = {
-  Query: {
-    hello: (_, { name }) => `Hello ${name || 'World'}`,
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  dataSources: () => {
+    return {
+      API: new API(),
+    };
   },
-}
-
-const server = new GraphQLServer({ typeDefs, resolvers })
-
-const options = {
-  port: 4000,
-  endpoint: '/graphql',
   subscriptions: '/subscriptions',
-  playground: '/playground',
+  playground: {
+    endpoint: '/playground',
+  },
   cors: {
     "origin": "*",
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
     "preflightContinue": false,
     "optionsSuccessStatus": 204
   }
-}
-server.start(options, ({ port }) => console.log(`Server is running on localhost:${port}`))
+})
+
+server.listen({
+  port: 4000,
+}).then(({ port }) => console.log(`Server is running on localhost:${port}`))

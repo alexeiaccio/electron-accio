@@ -6,7 +6,12 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "graphql-yoga": "^1.17.4"
+    "apollo-datasource-rest": "^0.5.0",
+    "apollo-server": "^2.6.2",
+    "apollo-server-express": "^2.6.2",
+    "graphql": "^14.3.1",
+    "graphql-yoga": "^1.17.4",
+    "lowdb": "^1.0.0"
   },
   "scripts": {
     "start": "node index.js"
