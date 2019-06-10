@@ -2,16 +2,10 @@ const { ApolloServer } = require('apollo-server');
 
 const { typeDefs } = require('./type-defs')
 const { resolvers } = require('./resolvers')
-const { API } = require('./api')
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  // dataSources: () => {
-  //   return {
-  //     API: new API(),
-  //   };
-  // },
   subscriptions: '/subscriptions',
   playground: {
     endpoint: '/playground',
