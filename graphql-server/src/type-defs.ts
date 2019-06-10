@@ -1,6 +1,6 @@
-const { gql } = require('apollo-server');
+import { gql } from 'apollo-server'
 
-exports.typeDefs = gql`
+export const typeDefs = gql`
   type LokiMeta {
     revision: Int
     created: Int
