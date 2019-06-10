@@ -7,11 +7,11 @@ const { API } = require('./api')
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  dataSources: () => {
-    return {
-      API: new API(),
-    };
-  },
+  // dataSources: () => {
+  //   return {
+  //     API: new API(),
+  //   };
+  // },
   subscriptions: '/subscriptions',
   playground: {
     endpoint: '/playground',

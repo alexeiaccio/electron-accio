@@ -7,7 +7,9 @@ import { gql } from 'apollo-boost'
 
 const GET_HELLO = gql`
   query GetHello {
-    hello
+    hello {
+      text
+    }
   }
 `
 
@@ -25,13 +27,15 @@ function App() {
             if (loading) return <p>Loading...</p>
             if (error) return <p>Error :(</p>
 
-            return data.hello
+            return data.hello.text
           }}
         </Query>
         <Mutation
           mutation={gql`
             mutation MutateHello($newHello: String!) {
-              newHello(newHello: $newHello)
+              newHello(newHello: $newHello) {
+                text
+              }
             }
           `}
           update={(cache, { data: { newHello } }) => {

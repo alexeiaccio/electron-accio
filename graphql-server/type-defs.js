@@ -1,10 +1,19 @@
 const { gql } = require('apollo-server');
 
 exports.typeDefs = gql`
+  type LokiMeta {
+    revision: Int
+    created: Int
+    version: Int
+    updated: Int
+  }
+  type Hello {
+    text: String
+  }
   type Query {
-    hello: String!
+    hello: Hello
   }
   type Mutation {
-    newHello(newHello: String): String
+    newHello(newHello: String): Hello
   }
 `

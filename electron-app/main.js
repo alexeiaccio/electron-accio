@@ -6,9 +6,9 @@ const react = require('child_process').spawn('node', ['./scripts/start.js'], {
   cwd: process.cwd()
 })
 
-const api = require('child_process').spawn('node', ['../api-server/index.js'], {
-  cwd: process.cwd()
-})
+// const api = require('child_process').spawn('node', ['../api-server/index.js'], {
+//   cwd: process.cwd()
+// })
 
 const graphql = require('child_process').spawn('node', ['../graphql-server/index.js'], {
   cwd: process.cwd()
@@ -51,7 +51,7 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
     react.kill('SIGINT')
-    api.kill('SIGINT')
+    // api.kill('SIGINT')
     graphql.kill('SIGINT')
   })
 }
