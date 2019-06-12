@@ -1,26 +1,57 @@
 import loki from 'lokijs'
 
-const db = new loki('../data/loki.json', {
+const db = new loki('../data/config.json', {
+  autoload: true,
   autosave: true,
 })
 
-const hello = db.addCollection('hello')
-hello.insert({ text: 'Hello World' })
+let config: any
+
+db.loadDatabase({}, (err) => {
+  if (err) {
+    console.log('Error: ' + err)
+  }
+  else {
+    console.log(`Database ${db.filename} loaded`)
+
+    config = db.getCollection('config')
+    if (!config) {
+      config = db.addCollection('config')
+      config.insert({ id: '1', name: 'Test repo' })
+    }
+  }
+})
+
+
+
+
+const getAllRepo = async (collection: { find: any }): Promise<object> => {
+  return collection && collection.find({ name: { $exists: true } })
+}
 
 export const resolvers = {
   Query: {
-    hello: async () => {
-      return hello.get(1)
+    config: async () => {
+      const { filename } = db
+      const repos = await getAllRepo(config)
+
+      return {
+        filename,
+        repos,
+      }
+    },
+    allRepos: async () => await getAllRepo(config),
+    repo: async (_source: any, props: { id: string }, _data: any) => {
+      return config ? await config.findOne({ id: props.id }) : null
     },
   },
   Mutation: {
-    newHello: async (_source: any, props: { newHello: string }, _data: any) => {
-      hello
-        .chain()
-        .find({ text: { $exists: true } })
-        .update((data: { text: string }) => (data.text = props.newHello))
+    addRepo: async (_source: any, props: { name: string }, _data: any) => {
+      const prev = await config.count()
+      const newRepo = { name: props.name, id: prev + 1 }
+      config && config.insert(newRepo)
 
-      return hello.get(1)
+      return newRepo
     },
   },
 }

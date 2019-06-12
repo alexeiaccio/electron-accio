@@ -1,68 +1,90 @@
-import React from 'react'
-import logo from './logo.svg'
-import './App.css'
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-import { Query, Mutation } from 'react-apollo'
-import { gql } from 'apollo-boost'
+import { Query, Mutation } from 'react-apollo';
+import { gql } from 'apollo-boost';
 
-const GET_HELLO = gql`
-  query GetHello {
-    hello {
-      text
+const GET_CONFIG = gql`
+  query GetCongig {
+    config {
+      filename
+      repos {
+        id
+        name
+      }
     }
   }
-`
+`;
 
 function App() {
-  const [inputValue, setInputValue] = React.useState('')
+  const [inputValue, setInputValue] = React.useState('');
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <Query
-          query={ GET_HELLO }
-        >
+        <Query query={GET_CONFIG}>
           {({ loading, error, data }) => {
-            if (loading) return <p>Loading...</p>
-            if (error) return <p>Error :(</p>
+            if (loading) return <p>Loading...</p>;
+            if (error) return <p>Error :(</p>;
 
-            return data.hello.text
+            return (
+              <div>
+                <p>{data.config.filename}</p>
+                <ul>
+                  {data.config.repos &&
+                    data.config.repos.map(({ id, name }) => (
+                      <li key={id}>{name}</li>
+                    ))}
+                </ul>
+                <Mutation
+                  mutation={gql`
+                    mutation MutationCofig($name: String!) {
+                      addRepo(name: $name) {
+                        id
+                        name
+                      }
+                    }
+                  `}
+                  update={(cache, { data: { addRepo } }) => {
+                    cache.writeQuery({
+                      query: GET_CONFIG,
+                      data: {
+                        config: {
+                          ...data.config,
+                          repos: data.config.repos.concat(addRepo),
+                        },
+                      },
+                    });
+                  }}
+                >
+                  {addRepo => (
+                    <div>
+                      <form
+                        onSubmit={e => {
+                          e.preventDefault();
+                          addRepo({ variables: { name: inputValue } });
+                          setInputValue('');
+                        }}
+                      >
+                        <input
+                          type="text"
+                          value={inputValue}
+                          onChange={({ target }) => setInputValue(target.value)}
+                        />
+                        <button type="submit">Submit</button>
+                      </form>
+                    </div>
+                  )}
+                </Mutation>
+              </div>
+            );
           }}
         </Query>
-        <Mutation
-          mutation={gql`
-            mutation MutateHello($newHello: String!) {
-              newHello(newHello: $newHello) {
-                text
-              }
-            }
-          `}
-          update={(cache, { data: { newHello } }) => {
-            cache.writeQuery({
-              query: GET_HELLO,
-              data: { hello: newHello },
-            });
-          }}
-        >
-          {newHello => (
-            <div>
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  newHello({ variables: { newHello: inputValue } });
-                  setInputValue('')
-                }}
-              >
-                <input type="text" value={inputValue} onChange={({ target }) => setInputValue(target.value)} />
-                <button type="submit">Submit</button>
-              </form>
-            </div>
-          )}
-        </Mutation>
       </header>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
