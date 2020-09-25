@@ -1,28 +1,24 @@
 import loki from 'lokijs'
 
 const db = new loki('../data/config.json', {
-  autoload: true,
   autosave: true,
 })
 
 let config: any
 
-db.loadDatabase({}, (err) => {
+db.loadDatabase({}, err => {
   if (err) {
     console.log('Error: ' + err)
-  }
-  else {
+  } else {
     console.log(`Database ${db.filename} loaded`)
 
     config = db.getCollection('config')
     if (!config) {
       config = db.addCollection('config')
-      config.insert({ id: '1', name: 'Test repo' })
+      config.insert({ id: 1, name: 'Test repo' })
     }
   }
 })
-
-
 
 
 const getAllRepo = async (collection: { find: any }): Promise<object> => {
@@ -50,7 +46,13 @@ export const resolvers = {
       const prev = await config.count()
       const newRepo = { name: props.name, id: prev + 1 }
       config && config.insert(newRepo)
-
+      db.saveDatabase(err => {
+        if (err) {
+          console.log('error : ' + err)
+        } else {
+          console.log('database saved.')
+        }
+      })
       return newRepo
     },
   },

@@ -1,0 +1,33 @@
+{
+  "name": "app",
+  "productName": "Accio CMS Desktop",
+  "bundleID": "pro.accio.AccioDesktopClient",
+  "companyName": "ACCIO",
+  "version": "0.1.0",
+  "main": "./main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexeiaccio/electron-accio/app"
+  },
+  "description": "Simple headless CMS for Desktop",
+  "author": {
+    "name": "ACCIO",
+    "email": "alexei.accio@gmail.com",
+    "url": "https://desktop.accio.pro/"
+  },
+  "license": "CC0-1.0",
+  "dependencies": {
+    "app-path": "^3.2.0",
+    "electron-window-state": "^5.0.3",
+    "event-kit": "^2.5.3",
+    "file-url": "^3.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "devtron": "^1.4.0",
+    "electron-debug": "^3.0.0",
+    "electron-devtools-installer": "^2.2.4",
+    "webpack-hot-middleware": "^2.25.0"
+  }
+}
